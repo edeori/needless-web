@@ -1,0 +1,36 @@
+title: Needless
+default_lang: en
+author:
+  name: 'Joe Bloggs'
+  email: needless@needless.hu
+taxonomies:
+  - category
+  - tag
+metadata:
+  description: 'Needless is a death metal band from Hungary.'
+summary:
+  enabled: true
+  format: short
+  size: 300
+  delimiter: '==='
+redirects: null
+routes: null
+social:
+  - label: Instagram
+    url: "https://www.instagram.com/needless_metal"
+    icon: "fab fa-instagram"
+  - label: YouTube
+    url: "https://www.youtube.com/@OfficialNeedless"
+    icon: "fab fa-youtube"
+  - label: Facebook
+    url: "https://www.facebook.com/needlesshun/"
+    icon: "fab fa-facebook"
+  - label: TikTok
+    url: "https://www.tiktok.com/@needlessmetal"
+    icon: "fab fa-tiktok"
+  - label: Spotify
+    url: "https://open.spotify.com/artist/3ObuybB6ob7FjhFnl5h85s"
+    icon: "fab fa-spotify"
+
+blog:
+  route: /blog

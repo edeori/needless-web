@@ -1,0 +1,17 @@
+<section id="footer" class="section bg-gray">
+    <section class="container {{ grid_size }}">
+        {% if site.social %}
+        <div class="bottom-bar" aria-label="Social links">
+            <div class="bottom-bar__inner">
+            {% for s in site.social %}
+                <a class="bottom-bar__link" href="{{ s.url|e('html_attr') }}" target="_blank" rel="noopener noreferrer" title="{{ s.label|e }}" aria-label="{{ s.label|e }}">
+                    {% if s.icon %}
+                        <i class="{{ s.icon|e }}" aria-hidden="true"></i>
+                    {% endif %}
+                </a>
+            {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </section>
+</section>

@@ -1,0 +1,54 @@
+{#
+  Hero component for homepage.
+  Editable via page header in Admin:
+    hero_text: HTML or markdown to display under the logo
+    hero_bg: filename in theme images (optional)
+    hero_logo: filename in theme images (optional)
+
+  Alternatively upload images to the page's media with names:
+    header-bg.png and logo-center.png
+#}
+
+{# Determine background image URL: prefer page media, then page.header, then theme image fallback #}
+{% if page.media.images['header-bg.png'] is defined %}
+    {% set hero_img = page.media.images['header-bg.png'].url %}
+{% elseif page.header.hero_bg %}
+    {% set hero_img = url('theme://images/' ~ page.header.hero_bg) %}
+{% else %}
+    {% set hero_img = url('theme://images/header-bg.png') %}
+{% endif %}
+
+{# Determine logo image URL: prefer page media, then page.header, then theme fallback #}
+{% if page.media.images['logo-center.png'] is defined %}
+    {% set hero_logo = page.media.images['logo-center.png'].url %}
+{% elseif page.header.hero_logo %}
+    {% set hero_logo = url('theme://images/' ~ page.header.hero_logo) %}
+{% else %}
+    {% set hero_logo = url('theme://images/logo-center.png') %}
+{% endif %}
+
+<div class="site-hero home-hero" role="banner">
+    <img class="site-hero-img" src="{{ hero_img }}" alt="" aria-hidden="true" />
+    <div class="site-hero-inner container {{ grid_size }}">
+        <div class="hero-inner-wrap">
+            <img class="hero-logo" src="{{ hero_logo }}" alt="{{ site.title }}" />
+            <div class="hero-content">
+                {% if page.header.hero_text %}
+                    {{ page.header.hero_text|raw }}
+                {% else %}
+                    {# Fallback: allow page content as hero text if provided #}
+                    {% if page.content %}
+                        {{ page.content|raw }}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<section id="{{ id }}" class="section modular-hero hero {{ page.header.hero_classes }} {{ page.header.background.parallax ? 'parallax' : '' }}" {% if hero_image %}style="background-image: url('{{ hero_image.url }}');"{% endif %}>
+    <div class="image-overlay"></div>
+    <section class="container {{ grid_size }}" style="text-align: {{ page.header.hero_align|default('center') }}">
+        {{ content|raw }}
+    </section>
+    <i id="to-start" class="pulse fa fa-angle-down"></i>
+</section>

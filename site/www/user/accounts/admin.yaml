@@ -1,0 +1,11 @@
+state: enabled
+email: needless@needless.hu
+fullname: 'Needless Needless'
+title: Administrator
+access:
+  admin:
+    login: true
+    super: true
+  site:
+    login: true
+hashed_password: $2y$10$AJoAyu9FfZM7dTLSVGiTFeaioZS.qPDZmS8A3ll5uoIJPSAIoHNs.

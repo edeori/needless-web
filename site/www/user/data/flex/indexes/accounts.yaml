@@ -1,0 +1,9 @@
+version: '1.2'
+timestamp: 1767526189
+count: 1
+index:
+  admin:
+    storage_key: admin
+    storage_timestamp: 1767526154
+    key: admin
+    email: needless@needless.hu
