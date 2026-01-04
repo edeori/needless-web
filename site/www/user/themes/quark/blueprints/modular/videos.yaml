@@ -1,0 +1,22 @@
+title: Videos
+'@extends': default
+
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          type: tab
+          title: Content
+          fields:
+            header.videos:
+              type: list
+              label: Videos
+              style: vertical
+              fields:
+                .title:
+                  type: text
+                  label: Title
+                .url:
+                  type: text
+                  label: YouTube URL

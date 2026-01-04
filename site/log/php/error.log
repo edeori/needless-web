@@ -12,3 +12,11 @@
 [04-Jan-2026 22:58:53] NOTICE: exiting, bye-bye!
 [04-Jan-2026 22:59:10] NOTICE: fpm is running, pid 258
 [04-Jan-2026 22:59:10] NOTICE: ready to handle connections
+[04-Jan-2026 23:30:08] NOTICE: Terminating ...
+[04-Jan-2026 23:30:08] NOTICE: exiting, bye-bye!
+[04-Jan-2026 23:30:25] NOTICE: fpm is running, pid 258
+[04-Jan-2026 23:30:25] NOTICE: ready to handle connections
+[04-Jan-2026 23:45:29] NOTICE: Terminating ...
+[04-Jan-2026 23:45:29] NOTICE: exiting, bye-bye!
+[04-Jan-2026 23:45:45] NOTICE: fpm is running, pid 257
+[04-Jan-2026 23:45:45] NOTICE: ready to handle connections

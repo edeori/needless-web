@@ -1,0 +1,39 @@
+title: About Needless
+'@extends': default
+
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          type: tab
+          title: Content
+          fields:
+            header.band_photo:
+              type: filepicker
+              label: Band Photo
+              preview_images: true
+              folder: '@self'
+            header.members:
+              type: list
+              label: Band Members
+              style: vertical
+              fields:
+                .name:
+                  type: text
+                  label: Name
+                .since:
+                  type: text
+                  label: Member since
+                .instrument:
+                  type: text
+                  label: Instrument
+        background:
+          type: tab
+          title: Background
+          fields:
+            header.background_image:
+              type: filepicker
+              label: Background Image
+              preview_images: true
+              folder: '@self'

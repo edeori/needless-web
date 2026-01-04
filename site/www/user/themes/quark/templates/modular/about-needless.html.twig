@@ -1,0 +1,39 @@
+{% set grid_size = theme_var('grid-size') %}
+{% set band_photo = page.header.band_photo ? page.media[page.header.band_photo] : null %}
+{% set bg = page.header.background_image ? page.media[page.header.background_image] : null %}
+{% set members = page.header.members ?: [] %}
+
+<section id="{{ page.menu|hyphenize }}" class="about-needless-section" {% if bg %}style="background-image: url('{{ bg.url }}');"{% endif %}>
+  <div class="about-needless-inner container {{ grid_size }}">
+    {% if band_photo %}
+      <div class="about-band-photo">
+        <img src="{{ band_photo.url }}" alt="{{ band_photo.meta.alt|default('Needless band photo') }}" loading="lazy" />
+      </div>
+    {% endif %}
+
+    <h2 class="about-label">ABOUT NEEDLESS</h2>
+
+    {% if members %}
+      <div class="about-members">
+        <h3 class="about-members__heading">Band Members</h3>
+        <ul class="about-members__list">
+          {% for member in members %}
+            <li class="about-member">
+              <span class="about-member__name">{{ member.name }}</span>
+              {% if member.instrument %}
+                <span class="about-member__instrument">{{ member.instrument }}</span>
+              {% endif %}
+              {% if member.since %}
+                <span class="about-member__since">Since {{ member.since }}</span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <div class="about-content">
+      {{ page.content|raw }}
+    </div>
+  </div>
+</section>

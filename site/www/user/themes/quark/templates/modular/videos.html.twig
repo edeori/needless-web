@@ -1,0 +1,43 @@
+{% set grid_size = theme_var('grid-size') %}
+{% set videos = page.header.videos ?: [] %}
+
+{% if videos %}
+<section id="{{ page.menu|hyphenize }}" class="videos-section">
+  <div class="container {{ grid_size }}">
+    <h2 class="videos-heading">VIDEOS</h2>
+    <div class="videos-carousel" data-video-count="{{ videos|length }}">
+      <button class="videos-nav prev" type="button" aria-label="Previous video">&#10094;</button>
+      <div class="videos-frame">
+        {% for video in videos %}
+          {% set video_id = video.url|replace({'https://www.youtube.com/watch?v=':''}) %}
+          <iframe class="videos-embed{% if loop.first %} active{% endif %}" data-index="{{ loop.index0 }}" src="https://www.youtube.com/embed/{{ video_id }}" title="{{ video.title|default('YouTube video') }}" frameborder="0" allowfullscreen loading="lazy"></iframe>
+        {% endfor %}
+      </div>
+      <button class="videos-nav next" type="button" aria-label="Next video">&#10095;</button>
+    </div>
+  </div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const section = document.currentScript.closest('.videos-section');
+  const frames = section.querySelectorAll('.videos-embed');
+  const prev = section.querySelector('.videos-nav.prev');
+  const next = section.querySelector('.videos-nav.next');
+  let index = 0;
+  function show(idx) {
+    frames.forEach((frame, i) => {
+      if (i === idx) frame.classList.add('active');
+      else frame.classList.remove('active');
+    });
+  }
+  prev.addEventListener('click', () => {
+    index = (index - 1 + frames.length) % frames.length;
+    show(index);
+  });
+  next.addEventListener('click', () => {
+    index = (index + 1) % frames.length;
+    show(index);
+  });
+});
+</script>
+{% endif %}

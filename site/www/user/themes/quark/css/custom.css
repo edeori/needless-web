@@ -644,3 +644,159 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   opacity: 0.7;
 }
 
+/* Videos section */
+.videos-section {
+  padding: 3rem 0 4rem;
+  text-align: center;
+}
+
+.videos-heading {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.videos-carousel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.videos-frame {
+  flex: 1;
+  max-width: 960px;
+  position: relative;
+  overflow: hidden;
+}
+
+.videos-embed {
+  width: 100%;
+  height: 540px;
+  display: none;
+}
+
+.videos-embed.active {
+  display: block;
+}
+
+.videos-nav {
+  background: transparent;
+  color: #000;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+
+.videos-nav:hover {
+  color: #c48d23;
+}
+
+@media (max-width: 840px) {
+  .videos-embed {
+    height: 320px;
+  }
+}
+
+/* About section */
+.about-needless-section {
+  position: relative;
+  padding: 3rem 0 4rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+}
+
+.about-needless-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 0;
+}
+
+.about-needless-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #111;
+}
+
+.about-band-photo {
+  margin: 0 auto 1.5rem;
+  max-width: 1170px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.about-band-photo img {
+  width: 100%;
+  display: block;
+  height: auto;
+}
+
+.about-label {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 1.5rem 0;
+}
+
+.about-members {
+  margin: 0 auto 2rem;
+  max-width: 640px;
+}
+
+.about-members__heading {
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.about-members__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.about-member {
+  background: rgba(255,255,255,0.7);
+  border-radius: 10px;
+  padding: 0.85rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.about-member__name {
+  display: block;
+  font-weight: 600;
+}
+
+.about-member__instrument {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.about-member__since {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.about-content {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.6;
+}
