@@ -278,6 +278,10 @@ body.header-fixed .hero + #start > #body-wrapper {
   padding-top: 0;
 }
 
+#body-wrapper.modular-body .container {
+  padding-bottom: 0;
+}
+
 /* Home hero module with full-bleed background + centered logo */
 .home-hero-wrapper.section {
   padding: 0;
@@ -644,6 +648,12 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   opacity: 0.7;
 }
 
+.footer-section {
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 2rem;
+}
+
 /* Videos section */
 .videos-section {
   padding: 3rem 0 4rem;
@@ -708,6 +718,7 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   background-repeat: no-repeat;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
+  margin-bottom: 0;
   overflow: hidden;
 }
 
