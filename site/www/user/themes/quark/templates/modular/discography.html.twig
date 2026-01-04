@@ -1,0 +1,48 @@
+{% set grid_size = theme_var('grid-size') %}
+{% set albums = page.header.albums ?: [] %}
+{% set bg = page.header.background_image ? (page.media[page.header.background_image] ?: null) : null %}
+
+<section id="{{ page.menu|hyphenize }}" class="discography-section" {% if bg %}style="background-image: url('{{ bg.url }}');"{% endif %}>
+  <div class="discography-inner">
+    <div class="container {{ grid_size }}">
+      <h2 class="discography-heading">DISCOGRAPHY</h2>
+      {% if albums %}
+        <div class="discography-scroller">
+          {% for album in albums %}
+            {% set cover_name = album.cover|default('') %}
+            {% set cover_media = cover_name ? page.media[cover_name] : null %}
+            <article class="album-card">
+              <div class="album-cover">
+                {% if cover_media %}
+                  <img src="{{ cover_media.url }}" alt="{{ album.title|default('Album cover') }}" loading="lazy" />
+                {% else %}
+                  <div class="album-cover__placeholder">No Image</div>
+                {% endif %}
+              </div>
+              <div class="album-meta">
+                <h3 class="album-title">{{ album.title|default('Untitled Release') }}</h3>
+                {% if album.release_date %}
+                  <p class="album-release">{{ album.release_date }}</p>
+                {% endif %}
+                <div class="album-links">
+                  {% if album.spotify %}
+                    <a class="album-link album-link--spotify" href="{{ album.spotify }}" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                      <i class="fab fa-spotify" aria-hidden="true"></i>
+                    </a>
+                  {% endif %}
+                  {% if album.apple_music %}
+                    <a class="album-link album-link--apple" href="{{ album.apple_music }}" target="_blank" rel="noopener" aria-label="Listen on Apple Music">
+                      <i class="fab fa-apple" aria-hidden="true"></i>
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="discography-empty">No albums added yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>

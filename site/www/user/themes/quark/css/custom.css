@@ -501,3 +501,146 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   }
 }
 
+/* Discography section */
+.discography-section {
+  position: relative;
+  padding: 3rem 0 4rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+
+.discography-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(6px);
+  z-index: 0;
+}
+
+.discography-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.discography-heading {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.discography-scroller {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  position: relative;
+  z-index: 1;
+}
+
+.discography-scroller::-webkit-scrollbar {
+  height: 6px;
+}
+
+.discography-scroller::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.4);
+  border-radius: 3px;
+}
+
+.album-card {
+  flex: 0 0 260px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 14px;
+  padding: 1rem;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.album-cover {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.2);
+}
+
+.album-cover img,
+.album-cover__placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.album-cover__placeholder {
+  display: grid;
+  place-items: center;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.album-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+  color: #fff;
+}
+
+.album-title {
+  font-size: 1.1rem;
+  margin: 0;
+  color: #fff;
+}
+
+.album-release {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin: 0;
+}
+
+.album-links {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.album-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.7rem;
+  text-decoration: none;
+  transition: color 160ms ease;
+  text-decoration: none;
+}
+
+.album-link--spotify:hover {
+  text-decoration: none;
+  color: #1DB954;
+}
+
+.album-link--apple:hover {
+  text-decoration: none;
+  color: #000;
+}
+
+.discography-empty {
+  text-align: center;
+  opacity: 0.7;
+}
+

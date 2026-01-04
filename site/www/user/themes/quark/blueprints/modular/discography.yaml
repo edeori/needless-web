@@ -1,0 +1,42 @@
+title: Discography
+'@extends': default
+
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          type: tab
+          title: Content
+          fields:
+            header.albums:
+              type: list
+              label: Albums
+              style: vertical
+              fields:
+                .title:
+                  type: text
+                  label: Album Title
+                .release_date:
+                  type: text
+                  label: Release Date
+                .cover:
+                  type: filepicker
+                  label: Cover Image
+                  preview_images: true
+                  folder: '@self'
+                .spotify:
+                  type: text
+                  label: Spotify URL
+                .apple_music:
+                  type: text
+                  label: Apple Music URL
+        background:
+          type: tab
+          title: Background
+          fields:
+            header.background_image:
+              type: filepicker
+              label: Background Image
+              preview_images: true
+              folder: '@self'
