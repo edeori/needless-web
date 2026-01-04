@@ -40,33 +40,40 @@
 .mobile-menu {
   transition: background-color 220ms ease, color 220ms ease;
 }
+.mobile-menu {
+  display: none;
+}
+
 .mobile-container .overlay.open,
 .mobile-menu.open,
 #header.scrolled .mobile-menu {
   background-color: #000 !important;
   color: #fff !important;
 }
-.mobile-menu {
-  position: fixed;
-  top: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  height: var(--header-height);
-  padding-right: 1rem;
-  width: auto;
-}
 
-.mobile-menu .button_container {
-  position: relative;
-  width: 32px;
-  height: 24px;
-  top: 0;
-  transform: none;
-}
+@media (max-width: 840px) {
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    height: var(--header-height);
+    padding-right: 1rem;
+    width: auto;
+  }
 
-#header.scrolled ~ .mobile-menu {
-  height: calc(var(--header-height) * 0.66);
+  .mobile-menu .button_container {
+    position: relative;
+    width: 32px;
+    height: 24px;
+    top: 0;
+    transform: none;
+  }
+
+  #header.scrolled ~ .mobile-menu {
+    height: calc(var(--header-height) * 0.66);
+  }
 }
 
 .mobile-menu .button_container span {
