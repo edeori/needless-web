@@ -47,16 +47,53 @@ jQuery(document).ready(function($){
     });
 
     // Responsive Menu
-    $('#toggle').click(function () {
-        $(this).toggleClass('active');
-        $('#overlay').toggleClass('open');
-        $('body').toggleClass('mobile-nav-open');
+    var $toggle = $('#toggle');
+    var $overlay = $('#overlay');
+
+    function openMobileMenu() {
+        $toggle.addClass('active');
+        $overlay.addClass('open');
+        $('body').addClass('mobile-nav-open');
+    }
+
+    function closeMobileMenu() {
+        $toggle.removeClass('active');
+        $overlay.removeClass('open');
+        $('body').removeClass('mobile-nav-open');
+    }
+
+    function isMobileMenuOpen() {
+        return $overlay.hasClass('open');
+    }
+
+    $toggle.click(function () {
+        if (isMobileMenuOpen()) {
+            closeMobileMenu();
+        } else {
+            openMobileMenu();
+        }
+    });
+
+    $('.overlay-menu a').on('click', function() {
+        closeMobileMenu();
     });
 
     // Tree Menu
     $(".tree").treemenu({delay:300});
 
     // Smooth scroll for anchor links (accounts for header height)
+    function setActiveNavItem(id){
+        var selector = id ? 'a[href="#' + id + '"]' : null;
+        var $desktopItems = $('.dropmenu ul li');
+        var $mobileItems = $('.overlay-menu li');
+        $desktopItems.removeClass('active');
+        $mobileItems.removeClass('active');
+        if (selector) {
+            $desktopItems.has(selector).addClass('active');
+            $mobileItems.has(selector).addClass('active');
+        }
+    }
+
     $(document).on('click', 'a[href^="#"]', function(e){
         var href = $(this).attr('href');
         // ignore empty or just '#'
@@ -76,8 +113,7 @@ jQuery(document).ready(function($){
                 location.hash = '#' + id;
             }
             // mark active menu item
-            $('.dropmenu ul li').removeClass('active');
-            $(this).closest('li').addClass('active');
+            setActiveNavItem(id);
         }
     });
 
@@ -96,8 +132,7 @@ jQuery(document).ready(function($){
             }
         }
         if (current){
-            $('.dropmenu ul li').removeClass('active');
-            $('.dropmenu ul li').has('a[href="#'+current+'"]').addClass('active');
+            setActiveNavItem(current);
         }
     }
     $(window).on('scroll resize', function(){
@@ -107,11 +142,8 @@ jQuery(document).ready(function($){
     updateActiveOnScroll();
 
     // Center underlines: compute each link's center relative to the menu container
-    function alignUnderlines(){
-        var $ul = $('.dropmenu > ul');
-        if (!$ul.length) return;
-        var ulRect = $ul[0].getBoundingClientRect();
-        $ul.find('li').each(function(){
+    function setUnderlineWidths($items){
+        $items.each(function(){
             var $li = $(this);
             var $a = $li.find('a').first();
             if (!$a.length) return;
@@ -128,10 +160,18 @@ jQuery(document).ready(function($){
             $a.css('--uw', textWidth + 'px');
         });
     }
+
+    function alignUnderlines(){
+        setUnderlineWidths($('.dropmenu > ul li'));
+        setUnderlineWidths($('.overlay-menu li'));
+    }
     // call on ready, resize and after content changes
     alignUnderlines();
     $(window).on('resize', function(){
         alignUnderlines();
+        if ($(window).width() > 840 && isMobileMenuOpen()) {
+            closeMobileMenu();
+        }
     });
     // also realign after smooth scroll completes (in case header size changes)
     $(document).on('click', 'a[href^="#"]', function(){
