@@ -82,7 +82,7 @@ jQuery(document).ready(function($){
     });
 
     // Update active menu item on scroll (highlight current section)
-    var sectionIds = $('section.page-section').map(function(){ return this.id; }).get();
+    var sectionIds = $('.modular-anchor-target').map(function(){ return this.id; }).get();
     function updateActiveOnScroll(){
         var scrollTop = $(window).scrollTop();
         var headerHeight = $('#header').outerHeight() || 0;
