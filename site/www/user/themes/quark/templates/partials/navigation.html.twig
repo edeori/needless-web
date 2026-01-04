@@ -1,6 +1,8 @@
-{% import 'macros/macros.html.twig' as macros %}
-
+{# Static single-page menu: anchors to sections on the home page #}
 <ul {{ tree ? 'class="tree"' : '' }}>
-    {{ macros.nav_loop(pages) }}
+    <li><a href="#home">Home</a></li>
+    <li><a href="#tour">Tour</a></li>
+    <li><a href="#albums">Albums</a></li>
+    <li><a href="#about">About</a></li>
 </ul>
 
