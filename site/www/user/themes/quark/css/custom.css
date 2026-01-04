@@ -915,3 +915,17 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   font-size: 1rem;
   line-height: 1.6;
 }
+
+@media (max-width: 720px) {
+  .about-needless-inner {
+    padding: 0 1.5rem;
+  }
+  .about-members__list {
+    grid-template-columns: 1fr;
+  }
+  .about-content {
+    padding: 0 1.25rem;
+    word-break: break-word;
+    hyphens: auto;
+  }
+}
