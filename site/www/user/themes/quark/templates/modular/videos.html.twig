@@ -1,8 +1,9 @@
 {% set grid_size = theme_var('grid-size') %}
 {% set videos = page.header.videos ?: [] %}
+{% set section_id = page.menu|hyphenize ~ '-section' %}
 
 {% if videos %}
-<section id="{{ page.menu|hyphenize }}" class="videos-section">
+<section id="{{ section_id }}" class="videos-section">
   <div class="container {{ grid_size }}">
     <h2 class="videos-heading">VIDEOS</h2>
     <div class="videos-carousel" data-video-count="{{ videos|length }}">
@@ -18,26 +19,34 @@
   </div>
 </section>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const section = document.currentScript.closest('.videos-section');
+(function() {
+  const section = document.getElementById('{{ section_id }}');
+  if (!section) return;
   const frames = section.querySelectorAll('.videos-embed');
+  if (!frames.length) return;
   const prev = section.querySelector('.videos-nav.prev');
   const next = section.querySelector('.videos-nav.next');
   let index = 0;
+
   function show(idx) {
     frames.forEach((frame, i) => {
-      if (i === idx) frame.classList.add('active');
-      else frame.classList.remove('active');
+      frame.classList.toggle('active', i === idx);
     });
   }
-  prev.addEventListener('click', () => {
-    index = (index - 1 + frames.length) % frames.length;
-    show(index);
-  });
-  next.addEventListener('click', () => {
-    index = (index + 1) % frames.length;
-    show(index);
-  });
-});
+
+  if (prev) {
+    prev.addEventListener('click', () => {
+      index = (index - 1 + frames.length) % frames.length;
+      show(index);
+    });
+  }
+
+  if (next) {
+    next.addEventListener('click', () => {
+      index = (index + 1) % frames.length;
+      show(index);
+    });
+  }
+})();
 </script>
 {% endif %}
