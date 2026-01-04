@@ -4,15 +4,20 @@
    - Ensure header text/links contrast as white when scrolled
 */
 
+:root {
+  --header-height: 112px;
+  --header-anchor-offset: calc(var(--header-height) + 28px);
+}
+
 /* Larger header at top: increase min-height so the transparent region is more visible */
 /* Header sizing + transitions */
 #header {
-  --header-height: 112px; /* reduced by 30% from 160px */
   transition: background-color 220ms ease, color 220ms ease, min-height 220ms ease, padding 220ms ease;
   min-height: var(--header-height);
   display: flex;
   align-items: center; /* vertically center content */
   padding: 12px 0;
+  border-bottom: none;
 }
 
 /* Full black when scrolled (site.js toggles this class) */
@@ -262,5 +267,237 @@
   #footer.section { padding: 14px 0; }
   #footer .bottom-bar__link { padding: 6px 8px; }
   #footer .bottom-bar__link i { font-size: 20px; }
+}
+
+/* Ensure body content starts below the tall fixed header */
+body.header-fixed #body-wrapper {
+  padding-top: var(--header-anchor-offset, 140px);
+}
+
+body.header-fixed .hero + #start > #body-wrapper {
+  padding-top: 0;
+}
+
+/* Home hero module with full-bleed background + centered logo */
+.home-hero-wrapper.section {
+  padding: 0;
+}
+
+.home-hero-wrapper.section + #start {
+  margin-top: 0;
+}
+
+body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
+  padding-top: 0;
+}
+
+.home-hero-banner {
+  width: 100%;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.home-hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.65) 100%);
+  opacity: 0.65;
+}
+
+.home-hero-inner {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.home-hero-logo {
+  width: min(640px, 85vw);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 10px 34px rgba(0,0,0,0.55));
+}
+
+.home-hero-text {
+  color: #fff;
+  font-size: clamp(1rem, 2.4vw, 1.45rem);
+  line-height: 1.5;
+  max-width: 640px;
+  text-shadow: 0 3px 14px rgba(0,0,0,0.6);
+}
+
+/* Tour section styling */
+.tour-section {
+  text-align: center;
+  padding: 2.5rem 0 4rem;
+}
+
+.tour-heading {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.75rem;
+}
+
+.tour-heading::after {
+  content: "";
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #c48d23, transparent);
+}
+
+.tour-track {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 2rem;
+}
+
+.tour-track a {
+  color: #c48d23;
+  text-decoration: underline;
+}
+
+.tour-table {
+  margin: 0 auto;
+  max-width: 980px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.tour-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 180px) minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #000;
+}
+
+.tour-row:last-child {
+  border-bottom: 0;
+}
+
+.tour-date {
+  text-align: left;
+}
+
+.tour-date .full-date {
+  display: block;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 1.05rem;
+}
+
+.tour-venue {
+  text-align: left;
+}
+
+.tour-venue .venue {
+  display: block;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.tour-venue .location {
+  display: block;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+.tour-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.tour-btn {
+  min-width: 120px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+  background: #fff;
+}
+
+.tour-btn:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.tour-btn.disabled {
+  pointer-events: none;
+  border-color: #111;
+  color: #111;
+  background: rgba(0,0,0,0.12);
+}
+
+.tour-section .no-upcoming {
+  opacity: 0.8;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 760px) {
+  .tour-row {
+    grid-template-columns: 1fr;
+  }
+
+  .tour-date {
+    width: 100%;
+  }
+
+  .tour-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .tour-btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* Anchor offset so scroll targets stop below the fixed header */
+.modular .modular-anchor-target {
+  position: relative;
+  display: block;
+  height: 1px;
+  scroll-margin-top: var(--header-anchor-offset, 140px);
+}
+
+@supports not (scroll-margin-top: 1px) {
+  .modular .modular-anchor-target::before {
+    content: "";
+    display: block;
+    height: var(--header-anchor-offset, 140px);
+    margin-top: calc(var(--header-anchor-offset, 140px) * -1);
+  }
 }
 

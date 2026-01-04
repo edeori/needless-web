@@ -1,6 +1,8 @@
 {% extends 'partials/base.html.twig' %}
 
-{% set show_onpage_menu = header.onpage_menu == true or header.onpage_menu is null %}
+{# Only enable onpage menu when explicitly requested in page header to avoid initializing
+    singlePageNav on pages without proper navigation links (prevents JS errors). #}
+{% set show_onpage_menu = header.onpage_menu is same as(true) %}
 
 {% block javascripts %}
     {% if show_onpage_menu %}
@@ -46,15 +48,41 @@
 {% endblock %}
 
 {% block hero %}
-    {% for module in page.collection() if module.template == 'modular/hero' %}
-        <div id="{{ module.menu|hyphenize }}"></div>
-        {{ module.content|raw }}
+    {% set hero_modules = page.collection() is not empty ? page.collection() : page.children %}
+    {% for module in hero_modules if module.template in ['modular/hero', 'modular/home-hero'] %}
+        <div class="modular-anchor-target" id="{{ module.menu|hyphenize }}"></div>
+        {% if module.template == 'modular/home-hero' %}
+            {% include 'modular/home-hero.html.twig' with {page: module} %}
+        {% else %}
+            {{ module.content|raw }}
+        {% endif %}
     {% endfor %}
 {% endblock %}
 
 {% block body %}
-    {% for module in page.collection() if module.template != 'modular/hero' %}
-        <div id="{{ module.menu|hyphenize }}"></div>
-        {{ module.content|raw }}
-    {% endfor %}
+    {# Debug: output module counts as HTML comment #}
+    <!-- modules (collection): {{ page.collection()|length }} | children: {{ page.children|length }} -->
+
+    {# Prefer collection (filters/pagination), but fall back to direct children if empty #}
+    {% set modules = page.collection() is not empty ? page.collection() : page.children %}
+
+    <section id="body-wrapper" class="section modular-body">
+        <section class="container {{ grid_size }}">
+            {% block messages %}
+                {% include 'partials/messages.html.twig' ignore missing %}
+            {% endblock %}
+
+            {% for module in modules %}
+                {% if module.template not in ['modular/hero', 'modular/home-hero'] %}
+                    <div class="modular-anchor-target" id="{{ module.menu|hyphenize }}"></div>
+                    {% set template_file = module.template ? module.template ~ '.html.twig' : null %}
+                    {% if template_file %}
+                        {% include template_file ignore missing with { page: module, content: module.content|raw } %}
+                    {% else %}
+                        {{ module.content|raw }}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </section>
+    </section>
 {% endblock %}

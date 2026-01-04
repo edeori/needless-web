@@ -1,0 +1,58 @@
+{% set grid_size = theme_var('grid-size') %}
+{% set tour_heading = page.header.tour_heading|default('TOUR DATES') %}
+{% set upcoming = page.header.upcoming %}
+{% set has_upcoming = upcoming is iterable and upcoming|length > 0 %}
+
+<section id="{{ page.menu|hyphenize }}" class="page-section tour-section">
+  <div class="container {{ grid_size }}">
+    <h2 class="tour-heading">{{ tour_heading }}</h2>
+
+    {% if page.header.track_text or page.header.bandsintown_url %}
+      <p class="tour-track">
+        {{ page.header.track_text|default('Track to get concert dates') }}
+        {% if page.header.bandsintown_url %}
+          <a href="{{ page.header.bandsintown_url }}" target="_blank" rel="noopener">Bandsintown</a>
+        {% endif %}
+      </p>
+    {% endif %}
+
+    {% if has_upcoming %}
+      <div class="tour-table">
+        {% for item in upcoming %}
+          {% set ticket_value = item.tickets|default('')|trim %}
+          {% set facebook_value = item.facebook_event|default('')|trim %}
+          {% set has_ticket = ticket_value is not empty %}
+          {% set has_facebook = facebook_value is not empty %}
+          <div class="tour-row">
+            <div class="tour-date">
+              <span class="full-date">{{ item.date ? item.date|date("Y.M.d") : '' }}</span>
+            </div>
+            <div class="tour-venue">
+              {% if item.venue %}
+                <span class="venue">{{ item.venue }}</span>
+                {% if item.location %}<span class="location">{{ item.location }}</span>{% endif %}
+              {% else %}
+                <span class="venue">{{ item.location }}</span>
+              {% endif %}
+            </div>
+            <div class="tour-actions">
+              {% if has_facebook and facebook_value starts with('http') %}
+                <a class="tour-btn" href="{{ facebook_value }}" target="_blank" rel="noopener">RSVP</a>
+              {% else %}
+                <span class="tour-btn disabled" aria-disabled="true">RSVP</span>
+              {% endif %}
+
+              {% if has_ticket and ticket_value starts with('http') %}
+                <a class="tour-btn" href="{{ ticket_value }}" target="_blank" rel="noopener">Tickets</a>
+              {% else %}
+                <span class="tour-btn disabled" aria-disabled="true">Tickets</span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="no-upcoming">No upcoming shows listed yet.</p>
+    {% endif %}
+  </div>
+</section>

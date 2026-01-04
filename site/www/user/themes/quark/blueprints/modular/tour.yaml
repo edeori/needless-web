@@ -1,0 +1,41 @@
+title: Tour
+'@extends': default
+
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          fields:
+            header.tour_heading:
+              type: text
+              label: Tour Heading
+              default: 'TOUR DATES'
+            header.bandsintown_url:
+              type: text
+              label: Bandsintown URL
+            header.track_text:
+              type: text
+              label: Track text
+              default: 'Track to get concert dates'
+            header.upcoming:
+              name: upcoming
+              type: list
+              label: Upcoming Dates
+
+              fields:
+                .date:
+                  type: date
+                  label: Upcoming Date
+                .location:
+                  type: text
+                  label: Location
+                .venue:
+                  type: text
+                  label: Venue
+                .tickets:
+                  type: text
+                  label: Tickets (URL or text)
+                .facebook_event:
+                  type: text
+                  label: Facebook Event URL

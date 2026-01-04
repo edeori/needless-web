@@ -1,0 +1,40 @@
+{% set grid_size = theme_var('grid-size') %}
+
+{# Resolve album cover image: prefer explicit field, otherwise first image, fallback to theme asset #}
+{% set album_cover_name = page.header.album_cover_image %}
+{% set album_cover_media = album_cover_name ? page.media[album_cover_name] : null %}
+{% if not album_cover_media and album_cover_name %}
+    {% set album_cover_media = page.media.images[album_cover_name] %}
+{% endif %}
+{% if not album_cover_media %}
+    {% set album_cover_media = page.media.images|first %}
+{% endif %}
+{% set album_cover_url = album_cover_media ? album_cover_media.url : url('theme://images/header-bg.png') %}
+
+{# Resolve logo image: prefer explicit selection, fallback to page media named logo, then theme default #}
+{% set logo_name = page.header.logo_image %}
+{% set logo_media = logo_name ? page.media[logo_name] : null %}
+{% if not logo_media and logo_name %}
+    {% set logo_media = page.media.images[logo_name] %}
+{% endif %}
+{% if not logo_media %}
+    {% set logo_media = page.media.images['logo-center.png'] %}
+{% endif %}
+{% set logo_url = logo_media ? logo_media.url : url('theme://images/logo-center.png') %}
+{% set logo_alt = page.header.logo_alt|default(site.title) %}
+
+<section class="section home-hero-wrapper">
+    <div class="home-hero-banner" style="background-image: url('{{ album_cover_url }}');">
+        <div class="home-hero-inner container {{ grid_size }}">
+            {% if logo_url %}
+                <img class="home-hero-logo" src="{{ logo_url }}" alt="{{ logo_alt|e }}" />
+            {% endif %}
+
+            {% if page.content %}
+                <div class="home-hero-text">
+                    {{ page.content|raw }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,36 @@
+title: Home Hero
+'@extends': default
+
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          fields:
+            header.album_cover_image:
+              type: filepicker
+              folder: '@self'
+              label: Album Cover Image
+              preview_images: true
+              accept:
+                - .png
+                - .jpg
+                - .jpeg
+                - .webp
+              description: 'Upload an album cover image to this module''s Media tab, then pick it here.'
+            header.logo_image:
+              type: filepicker
+              folder: '@self'
+              label: Center Logo Image
+              preview_images: true
+              accept:
+                - .png
+                - .svg
+                - .jpg
+                - .webp
+              description: 'Upload the logo file to this module and select it here.'
+            header.logo_alt:
+              type: text
+              label: Logo alt text
+              default: Site Logo
+              description: 'Accessible text for screen readers / SEO.'

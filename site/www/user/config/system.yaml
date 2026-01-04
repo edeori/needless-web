@@ -29,7 +29,7 @@ languages:
   pages_fallback_only: false
   debug: false
 home:
-  alias: /home
+  alias: /landing
   hide_in_urls: false
 pages:
   type: regular
@@ -187,7 +187,7 @@ media:
   unsupported_inline_types: {  }
   allowed_fallback_types: {  }
   auto_metadata_exif: false
-  upload_limit: 2097152
+  upload_limit: 52428800
 session:
   enabled: true
   initialize: true
