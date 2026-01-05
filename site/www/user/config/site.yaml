@@ -12,7 +12,16 @@ seo:
   description: 'Needless is a Hungarian progressive death metal band (since 2004), now signed to Inertial Music Records. Space-opera intensity, global reach.'
   keywords: 'Needless, progressive death metal, Hungarian metal, Inertial Music Records'
   robots: 'index,follow'
-  twitter_card: summary
+  twitter_card: summary_large_image
+  image: 'theme://images/logo-center.png'
+  twitter_image: 'theme://images/logo-center.png'
+  twitter_site: '@NeedlessMetal'
+  twitter_creator: '@NeedlessMetal'
+structured_data:
+  musicgroup:
+    genre: 'Progressive Death Metal'
+    founding_location: 'Hungary'
+    founding_date: '2004'
 summary:
   enabled: true
   format: short

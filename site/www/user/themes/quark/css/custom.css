@@ -426,12 +426,14 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   width: 100%;
   min-height: 100vh;
   background-size: cover;
-  background-position: center;
+  background-position: center calc(50% + var(--hero-bg-shift, 0px));
   background-repeat: no-repeat;
   position: relative;
   display: flex;
   align-items: stretch;
   justify-content: center;
+  transition: background-position 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: background-position;
 }
 
 .home-hero-banner::before {
@@ -453,6 +455,8 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   justify-content: center;
   text-align: center;
   gap: 1.5rem;
+  perspective: 1200px;
+  perspective-origin: center;
 }
 
 .home-hero-logo {
@@ -460,6 +464,21 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   height: auto;
   display: block;
   filter: drop-shadow(0 10px 34px rgba(0,0,0,0.55));
+  transform:
+    translate3d(0, var(--hero-logo-parallax, 0px), 0)
+    rotateX(var(--hero-logo-tilt-x, 0deg))
+    rotateY(var(--hero-logo-tilt-y, 0deg));
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), filter 320ms ease;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-banner {
+    transition: none;
+  }
+  .home-hero-logo {
+    transition: none;
+  }
 }
 
 .home-hero-text {

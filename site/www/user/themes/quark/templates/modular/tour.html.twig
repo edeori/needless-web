@@ -2,6 +2,7 @@
 {% set tour_heading = page.header.tour_heading|default('TOUR DATES') %}
 {% set upcoming = page.header.upcoming %}
 {% set has_upcoming = upcoming is iterable and upcoming|length > 0 %}
+{% set structured_events = [] %}
 
 <section id="{{ page.menu|hyphenize }}" class="page-section tour-section">
   <div class="container {{ grid_size }}">
@@ -49,10 +50,45 @@
               {% endif %}
             </div>
           </div>
+          {% if item.date %}
+            {% set event_name = (item.venue|default('Needless Live')) ~ (item.location ? ' - ' ~ item.location : '') %}
+            {% set event_location = {
+                '@type': 'Place',
+                'name': item.venue|default(item.location|default('Concert Venue')),
+                'address': item.location|default('')
+            } %}
+            {% set event_obj = {
+                '@type': 'MusicEvent',
+                'name': event_name,
+                'startDate': item.date|date('c'),
+                'eventStatus': 'https://schema.org/EventScheduled',
+                'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+                'url': page.url(true, true),
+                'performer': {
+                    '@type': 'MusicGroup',
+                    'name': site.title
+                },
+                'location': event_location
+            } %}
+            {% if has_ticket and ticket_value starts with('http') %}
+                {% set event_obj = event_obj|merge({'offers': {
+                    '@type': 'Offer',
+                    'url': ticket_value,
+                    'availability': 'https://schema.org/InStock'
+                }}) %}
+            {% endif %}
+            {% if has_facebook and facebook_value starts with('http') %}
+                {% set event_obj = event_obj|merge({'sameAs': [facebook_value]}) %}
+            {% endif %}
+            {% set structured_events = structured_events|merge([event_obj]) %}
+          {% endif %}
         {% endfor %}
       </div>
     {% else %}
       <p class="no-upcoming">No upcoming shows listed yet.</p>
     {% endif %}
   </div>
+  {% if structured_events %}
+  <script type="application/ld+json">{{ {'@context': 'https://schema.org', '@graph': structured_events}|json_encode|raw }}</script>
+  {% endif %}
 </section>

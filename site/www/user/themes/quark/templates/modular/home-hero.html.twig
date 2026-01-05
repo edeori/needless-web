@@ -1,4 +1,9 @@
 {% set grid_size = theme_var('grid-size') %}
+{% set hero_section_id = (page.menu ? page.menu|hyphenize : 'home-hero') ~ '-module' %}
+{% set parallax_config = page.header.parallax ?? {} %}
+{% set parallax_logo_shift = parallax_config.logo|default(35) %}
+{% set parallax_bg_shift = parallax_config.background|default(70) %}
+{% set parallax_tilt = parallax_config.tilt|default(10) %}
 
 {# Resolve album cover image: prefer explicit field, otherwise first image, fallback to theme asset #}
 {% set album_cover_name = page.header.album_cover_image %}
@@ -23,7 +28,7 @@
 {% set logo_url = logo_media ? logo_media.url : url('theme://images/logo-center.png') %}
 {% set logo_alt = page.header.logo_alt|default(site.title) %}
 
-<section class="section home-hero-wrapper">
+<section id="{{ hero_section_id }}" class="section home-hero-wrapper">
     <div class="home-hero-banner" style="background-image: url('{{ album_cover_url }}');">
         <div class="home-hero-inner container {{ grid_size }}">
             {% if logo_url %}
@@ -38,3 +43,60 @@
         </div>
     </div>
 </section>
+<script>
+(function() {
+  const section = document.getElementById('{{ hero_section_id|e('js') }}');
+  if (!section) return;
+  const banner = section.querySelector('.home-hero-banner');
+  const logo = section.querySelector('.home-hero-logo');
+  if (!banner || !logo) return;
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return;
+  const pointerFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  const maxBgShift = {{ parallax_bg_shift|default(40)|e('js') }};
+  const maxLogoShift = {{ parallax_logo_shift|default(22)|e('js') }};
+  const maxTilt = {{ parallax_tilt|default(6)|e('js') }};
+  let ticking = false;
+
+  function updateParallax() {
+    const rect = banner.getBoundingClientRect();
+    const viewportH = window.innerHeight || document.documentElement.clientHeight || 1;
+    const offset = (rect.top + rect.height / 2) - viewportH / 2;
+    const normalized = Math.max(-1, Math.min(1, offset / viewportH));
+    banner.style.setProperty('--hero-bg-shift', (normalized * maxBgShift).toFixed(2) + 'px');
+    logo.style.setProperty('--hero-logo-parallax', (-normalized * maxLogoShift).toFixed(2) + 'px');
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }
+
+  function handlePointer(event) {
+    if (!pointerFine) return;
+    const bounds = section.getBoundingClientRect();
+    const relX = (event.clientX - (bounds.left + bounds.width / 2)) / bounds.width;
+    const relY = (event.clientY - (bounds.top + bounds.height / 2)) / bounds.height;
+    const tiltX = Math.max(-maxTilt, Math.min(maxTilt, relY * -maxTilt));
+    const tiltY = Math.max(-maxTilt, Math.min(maxTilt, relX * maxTilt));
+    logo.style.setProperty('--hero-logo-tilt-x', tiltX.toFixed(2) + 'deg');
+    logo.style.setProperty('--hero-logo-tilt-y', tiltY.toFixed(2) + 'deg');
+  }
+
+  function resetTilt() {
+    logo.style.setProperty('--hero-logo-tilt-x', '0deg');
+    logo.style.setProperty('--hero-logo-tilt-y', '0deg');
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', updateParallax);
+  if (pointerFine) {
+    section.addEventListener('pointermove', handlePointer);
+    section.addEventListener('pointerleave', resetTilt);
+  }
+  updateParallax();
+})();
+</script>
