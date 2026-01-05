@@ -6,8 +6,13 @@ author:
 taxonomies:
   - category
   - tag
-metadata:
-  description: 'Needless is a death metal band from Hungary.'
+metadata: {  }
+seo:
+  title: 'Needless – Progressive Death Metal from Hungary'
+  description: 'Needless is a Hungarian progressive death metal band (since 2004), now signed to Inertial Music Records. Space-opera intensity, global reach.'
+  keywords: 'Needless, progressive death metal, Hungarian metal, Inertial Music Records'
+  robots: 'index,follow'
+  twitter_card: summary
 summary:
   enabled: true
   format: short

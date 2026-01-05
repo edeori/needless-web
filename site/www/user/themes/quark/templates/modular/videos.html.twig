@@ -3,50 +3,55 @@
 {% set section_id = page.menu|hyphenize ~ '-section' %}
 
 {% if videos %}
-<section id="{{ section_id }}" class="videos-section">
-  <div class="container {{ grid_size }}">
-    <h2 class="videos-heading">VIDEOS</h2>
-    <div class="videos-carousel" data-video-count="{{ videos|length }}">
-      <button class="videos-nav prev" type="button" aria-label="Previous video">&#10094;</button>
-      <div class="videos-frame">
-        {% for video in videos %}
-          {% set video_id = video.url|replace({'https://www.youtube.com/watch?v=':''}) %}
-          <iframe class="videos-embed{% if loop.first %} active{% endif %}" data-index="{{ loop.index0 }}" src="https://www.youtube.com/embed/{{ video_id }}" title="{{ video.title|default('YouTube video') }}" frameborder="0" allowfullscreen loading="lazy"></iframe>
-        {% endfor %}
-      </div>
-      <button class="videos-nav next" type="button" aria-label="Next video">&#10095;</button>
-    </div>
-  </div>
-</section>
-<script>
-(function() {
-  const section = document.getElementById('{{ section_id }}');
-  if (!section) return;
-  const frames = section.querySelectorAll('.videos-embed');
-  if (!frames.length) return;
-  const prev = section.querySelector('.videos-nav.prev');
-  const next = section.querySelector('.videos-nav.next');
-  let index = 0;
+	<section id="{{ section_id }}" class="videos-section">
+		<div class="container {{ grid_size }}">
+			<h2 class="videos-heading">VIDEOS</h2>
+			<div class="section-divider videos-divider" aria-hidden="true"></div>
+			<div class="videos-carousel" data-video-count="{{ videos|length }}">
+				<button class="videos-nav prev" type="button" aria-label="Previous video">&#10094;</button>
+				<div class="videos-frame">
+					{% for video in videos %}
+						{% set video_id = video.url|replace({'https://www.youtube.com/watch?v=':''}) %}
+						<iframe class="videos-embed{% if loop.first %} active{% endif %}" data-index="{{ loop.index0 }}" src="https://www.youtube.com/embed/{{ video_id }}" title="{{ video.title|default('YouTube video') }}" frameborder="0" allowfullscreen loading="lazy"></iframe>
+					{% endfor %}
+				</div>
+				<button class="videos-nav next" type="button" aria-label="Next video">&#10095;</button>
+			</div>
+		</div>
+	</section>
+	<script>
+		(function () {
+const section = document.getElementById('{{ section_id }}');
+if (! section) 
+return;
 
-  function show(idx) {
-    frames.forEach((frame, i) => {
-      frame.classList.toggle('active', i === idx);
-    });
-  }
+const frames = section.querySelectorAll('.videos-embed');
+if (! frames.length) 
+return;
 
-  if (prev) {
-    prev.addEventListener('click', () => {
-      index = (index - 1 + frames.length) % frames.length;
-      show(index);
-    });
-  }
+const prev = section.querySelector('.videos-nav.prev');
+const next = section.querySelector('.videos-nav.next');
+let index = 0;
 
-  if (next) {
-    next.addEventListener('click', () => {
-      index = (index + 1) % frames.length;
-      show(index);
-    });
-  }
+function show(idx) {
+frames.forEach((frame, i) => {
+frame.classList.toggle('active', i === idx);
+});
+}
+
+if (prev) {
+prev.addEventListener('click', () => {
+index = (index - 1 + frames.length) % frames.length;
+show(index);
+});
+}
+
+if (next) {
+next.addEventListener('click', () => {
+index = (index + 1) % frames.length;
+show(index);
+});
+}
 })();
-</script>
+	</script>
 {% endif %}

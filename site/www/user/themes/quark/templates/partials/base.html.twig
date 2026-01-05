@@ -1,20 +1,48 @@
 {% set body_classes = body_class(['header-fixed', 'header-animated', 'header-dark', 'header-transparent', 'sticky-footer']) %}
 {% set grid_size = theme_var('grid-size') %}
 {% set compress = theme_var('production-mode') ? '.min.css' : '.css' %}
+{% set page_seo = page.header.seo ?? {} %}
+{% set seo_config = site.seo ?? {} %}
+{% set seo_title = page_seo.title ?? page.header.seo_title ?? page.title ?? seo_config.title ?? site.title %}
+{% set seo_description = page_seo.description ?? page.header.seo_description ?? seo_config.description ?? '' %}
+{% set seo_keywords = page_seo.keywords ?? page.header.seo_keywords ?? seo_config.keywords ?? '' %}
+{% set seo_robots = page_seo.robots ?? page.header.robots ?? seo_config.robots ?? 'index,follow' %}
+{% set seo_twitter_card = page_seo.twitter_card ?? seo_config.twitter_card ?? 'summary' %}
+{% set seo_twitter_title = page_seo.twitter_title ?? seo_title %}
+{% set seo_twitter_description = page_seo.twitter_description ?? seo_description %}
+{% set seo_url = page.url(true, true) %}
 {% use 'blocks/base.html.twig' %}
 <!DOCTYPE html>
 <html lang="{{ grav.language.getActive ?: grav.config.site.default_lang }}">
 <head>
 {% block head deferred %}
     <meta charset="utf-8" />
-    <title>{{ site.title|e('html') }}</title>
+    <title>{{ seo_title|e('html') }}</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if seo_description %}
+    <meta name="description" content="{{ seo_description|e('html_attr') }}">
+    {% endif %}
+    {% if seo_keywords %}
+    <meta name="keywords" content="{{ seo_keywords|e('html_attr') }}">
+    {% endif %}
+    <meta name="robots" content="{{ seo_robots|e('html_attr') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ seo_title|e('html_attr') }}">
+    {% if seo_description %}
+    <meta property="og:description" content="{{ seo_description|e('html_attr') }}">
+    {% endif %}
+    <meta property="og:url" content="{{ seo_url|e('html_attr') }}">
+    <meta name="twitter:card" content="{{ seo_twitter_card|e('html_attr') }}">
+    <meta name="twitter:title" content="{{ seo_twitter_title|e('html_attr') }}">
+    {% if seo_twitter_description %}
+    <meta name="twitter:description" content="{{ seo_twitter_description|e('html_attr') }}">
+    {% endif %}
     {% include 'partials/metadata.html.twig' %}
 
     <link rel="icon" type="image/ico" href="{{ url('theme://images/favicon.ico') }}" />
-    <link rel="canonical" href="{{ page.url(true, true) }}" />
+    <link rel="canonical" href="{{ seo_url }}" />
 {% endblock head %}
 
 {% block stylesheets %}

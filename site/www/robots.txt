@@ -1,21 +1,13 @@
 User-agent: *
-Disallow: /.github/
-Disallow: /.phan/
-Disallow: /assets/
+Disallow: /admin/
 Disallow: /backup/
-Disallow: /bin/
 Disallow: /cache/
+Disallow: /bin/
 Disallow: /logs/
 Disallow: /system/
-Disallow: /tests/
-Disallow: /tmp/
-Disallow: /user/
 Disallow: /vendor/
+Disallow: /tmp/
+Disallow: /tests/
 Disallow: /webserver-configs/
-Allow: /user/pages/
-Allow: /user/themes/
-Allow: /user/images/
-Allow: /
-Allow: *.css$
-Allow: *.js$
-Allow: /system/*.js$
+
+Sitemap: https://needless.hu/sitemap.xml
