@@ -111,6 +111,20 @@
   z-index: 1;
 }
 
+/* Center the desktop navigation within the header */
+#header .navbar {
+  justify-content: center;
+}
+
+#header .navbar .navbar-section.desktop-menu {
+  flex: 0 1 auto;
+  justify-content: center;
+}
+
+#header .navbar .navbar-section.desktop-menu .dropmenu {
+  margin: 0 auto;
+}
+
 /* When scrolled, hide the overlay so the header is pure black */
 /* When scrolled: hide overlay and make header fully black (no transparent area)
    Also shrink header to 66% of top height. */
@@ -128,7 +142,7 @@
 /* Navigation styling: uppercase, evenly spaced, pipe separators */
 .dropmenu > ul {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   list-style: none;
   margin: 0;
@@ -689,10 +703,18 @@ body.header-fixed .home-hero-wrapper.section + #start > #body-wrapper {
   display: flex;
   gap: 1.5rem;
   overflow-x: auto;
-  padding-bottom: 1rem;
+  padding: 0 1rem 1rem;
   scroll-snap-type: x mandatory;
   position: relative;
   z-index: 1;
+  justify-content: flex-start;
+}
+
+@media (min-width: 900px) {
+  .discography-scroller {
+    justify-content: center;
+    margin: 0 auto;
+  }
 }
 
 .discography-scroller::-webkit-scrollbar {
