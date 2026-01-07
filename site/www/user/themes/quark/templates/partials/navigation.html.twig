@@ -1,9 +1,14 @@
 {# Static single-page menu: anchors to sections on the home page #}
+{% set landing_page = pages.find(config.system.home.alias|default('/')) ?? pages.find('/') %}
+{% set landing_url = landing_page ? landing_page.url : '/' %}
+{% set epk_page = pages.find('/epk') ?? grav.pages.find('/epk') %}
+{% set epk_url = epk_page ? epk_page.url : '/epk' %}
 <ul {{ tree ? 'class="tree"' : '' }}>
-    <li><a href="#home">Home</a></li>
-    <li><a href="#tour">Tour</a></li>
-    <li><a href="#albums">Albums</a></li>
-    <li><a href="#videos">Videos</a></li>
-    <li><a href="#about">About</a></li>
+    <li><a href="{{ landing_url }}#home">Home</a></li>
+    <li><a href="{{ landing_url }}#tour">Tour</a></li>
+    <li><a href="{{ landing_url }}#albums">Albums</a></li>
+    <li><a href="{{ landing_url }}#videos">Videos</a></li>
+    <li><a href="{{ landing_url }}#about">About</a></li>
+    <li><a href="{{ epk_url }}">EPK</a></li>
     <li><a class="external" href="https://needlessofficial.bandcamp.com/merch" target="_blank" rel="noopener">Merch</a></li>
 </ul>

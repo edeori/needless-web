@@ -94,27 +94,54 @@ jQuery(document).ready(function($){
         }
     }
 
-    $(document).on('click', 'a[href^="#"]', function(e){
+    function normalizePath(path) {
+        if (!path) return '/';
+        return path.replace(/\/+$/, '') || '/';
+    }
+
+    $(document).on('click', 'a[href*="#"]', function(e){
         var href = $(this).attr('href');
-        // ignore empty or just '#'
-        if (!href || href === '#') return;
-        var id = href.slice(1);
-        var $target = $('#' + id);
-        if ($target.length) {
-            e.preventDefault();
-            // calculate offset (current header height)
-            var headerHeight = $('#header').outerHeight() || 0;
-            var targetTop = $target.offset().top - headerHeight;
-            $('html, body').animate({ scrollTop: targetTop }, 600);
-            // update hash without jumping
-            if (history.replaceState) {
-                history.replaceState(null, null, '#' + id);
-            } else {
-                location.hash = '#' + id;
+        if (!href) return;
+        if (href === '#') return;
+
+        var targetId = null;
+        var targetPath = window.location.pathname;
+
+        if (href.charAt(0) === '#') {
+            targetId = href.slice(1);
+        } else {
+            var parsed;
+            try {
+                parsed = new URL(href, window.location.origin);
+            } catch (err) {
+                return;
             }
-            // mark active menu item
-            setActiveNavItem(id);
+            if (!parsed.hash || parsed.host !== window.location.host) {
+                return;
+            }
+            targetId = parsed.hash.slice(1);
+            targetPath = parsed.pathname;
+            if (normalizePath(targetPath) !== normalizePath(window.location.pathname)) {
+                return;
+            }
         }
+
+        if (!targetId) return;
+        var $target = $('#' + targetId);
+        if (!$target.length) return;
+
+        e.preventDefault();
+        var headerHeight = $('#header').outerHeight() || 0;
+        var targetTop = $target.offset().top - headerHeight;
+        $('html, body').animate({ scrollTop: targetTop }, 600);
+
+        if (history.replaceState) {
+            history.replaceState(null, null, '#' + targetId);
+        } else {
+            location.hash = '#' + targetId;
+        }
+
+        setActiveNavItem(targetId);
     });
 
     // Update active menu item on scroll (highlight current section)
@@ -177,5 +204,101 @@ jQuery(document).ready(function($){
     $(document).on('click', 'a[href^="#"]', function(){
         setTimeout(alignUnderlines, 320);
     });
+
+    // EPK gallery lightbox
+    var $epkItems = $('.epk-gallery__item');
+    var $epkLightbox = $('#epkLightbox');
+    if ($epkItems.length && $epkLightbox.length) {
+        var $body = $('body');
+        var $lightboxImage = $epkLightbox.find('.epk-lightbox__image');
+        var $lightboxText = $epkLightbox.find('.epk-lightbox__text');
+        var $lightboxDownload = $epkLightbox.find('.epk-lightbox__download-icon');
+        var currentIndex = 0;
+
+        function renderLightbox(index) {
+            var total = $epkItems.length;
+            if (!total) {
+                return;
+            }
+            if (index < 0) index = 0;
+            if (index >= total) index = total - 1;
+            currentIndex = index;
+            var $item = $epkItems.eq(currentIndex);
+            var src = $item.data('full');
+            var caption = $item.data('caption') || '';
+            var alt = $item.data('alt') || caption || 'Press photo';
+            var downloadUrl = $item.data('download');
+            var filename = $item.data('filename') || '';
+
+            $lightboxImage.attr('src', src).attr('alt', alt);
+            $lightboxText.text(caption);
+            if (downloadUrl) {
+                $lightboxDownload.attr('href', downloadUrl);
+                if (filename) {
+                    $lightboxDownload.attr('download', filename);
+                } else {
+                    $lightboxDownload.removeAttr('download');
+                }
+                $lightboxDownload.show();
+            } else {
+                $lightboxDownload.hide();
+            }
+        }
+
+        function openLightbox(index) {
+            renderLightbox(index);
+            $epkLightbox.addClass('is-active').attr('aria-hidden', 'false');
+            $body.addClass('epk-lightbox-open');
+        }
+
+        function closeLightbox() {
+            $epkLightbox.removeClass('is-active').attr('aria-hidden', 'true');
+            $body.removeClass('epk-lightbox-open');
+        }
+
+        function showSibling(step) {
+            var total = $epkItems.length;
+            if (!total) return;
+            var nextIndex = (currentIndex + step + total) % total;
+            renderLightbox(nextIndex);
+        }
+
+        $epkItems.on('click keydown', function(event){
+            if ($(event.target).closest('.epk-gallery__download').length) {
+                return;
+            }
+            var isKeyboard = event.type === 'keydown';
+            if (isKeyboard) {
+                var key = event.key || event.keyCode;
+                if (key !== 'Enter' && key !== ' ' && key !== 'Spacebar' && key !== 13 && key !== 32) {
+                    return;
+                }
+                event.preventDefault();
+            }
+            var index = parseInt($(this).data('index'), 10) || 0;
+            openLightbox(index);
+        });
+
+        $epkLightbox.find('.epk-lightbox__close').on('click', closeLightbox);
+        $epkLightbox.find('.epk-lightbox__backdrop').on('click', closeLightbox);
+        $epkLightbox.find('.epk-lightbox__nav--next').on('click', function(){
+            showSibling(1);
+        });
+        $epkLightbox.find('.epk-lightbox__nav--prev').on('click', function(){
+            showSibling(-1);
+        });
+
+        $(document).on('keydown', function(event){
+            if (!$epkLightbox.hasClass('is-active')) return;
+            var key = event.key || event.keyCode;
+            if (key === 'Escape' || key === 'Esc' || key === 27) {
+                closeLightbox();
+            } else if (key === 'ArrowRight' || key === 39) {
+                showSibling(1);
+            } else if (key === 'ArrowLeft' || key === 37) {
+                showSibling(-1);
+            }
+        });
+    }
 
 });

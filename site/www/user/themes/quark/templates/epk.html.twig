@@ -1,0 +1,189 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block body_classes %}{{ parent() }} epk-page{% endblock %}
+
+{% block content %}
+    {% set grid_size = theme_var('grid-size') %}
+    {% set presskit_file = page.header.presskit_file ?? null %}
+    {% set presskit_media = presskit_file ? page.media[presskit_file] : null %}
+    {% if not presskit_media and page.media.files|length %}
+        {% set presskit_media = page.media.files|first %}
+    {% endif %}
+
+{% set press_gallery = [] %}
+{% for item in page.header.press_images|default([]) %}
+    {% set media_item = item.image ? page.media[item.image] : null %}
+    {% if media_item %}
+        {% set press_gallery = press_gallery|merge([{
+            image: media_item,
+            caption: item.caption|default('')
+        }]) %}
+    {% endif %}
+{% endfor %}
+{% if press_gallery is empty %}
+    {% for img in page.media.images %}
+        {% set press_gallery = press_gallery|merge([{
+            image: img,
+            caption: ''
+        }]) %}
+    {% endfor %}
+{% endif %}
+
+{% set reviews = [] %}
+{% for review in page.header.reviews|default([]) %}
+    {% if review.quote %}
+        {% set reviews = reviews|merge([review]) %}
+    {% endif %}
+{% endfor %}
+
+    <section class="section epk-intro">
+        <section class="container {{ grid_size }}">
+            <div class="epk-intro__header">
+                <div>
+                    <p class="epk-kicker">Electronic Press Kit</p>
+                    <h1>{{ page.title }}</h1>
+                </div>
+                {% if presskit_media %}
+                    <a class="epk-presskit-link"
+                       href="{{ presskit_media.url }}"
+                       target="_blank"
+                       rel="noopener"
+                       download="{{ presskit_media.filename }}">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                        {{ page.header.presskit_label|default('Press kit letöltése') }}
+                    </a>
+                {% endif %}
+            </div>
+            {% if page.content %}
+                <div class="epk-intro__body">
+                    {{ page.content|raw }}
+                </div>
+            {% endif %}
+        </section>
+    </section>
+
+    <section class="section epk-content">
+        <section class="container {{ grid_size }}">
+            <div class="epk-flex">
+                <div class="epk-embeds">
+                    {% if page.header.bandcamp_embed_src %}
+                        <div class="epk-embed-block">
+                            <div class="epk-section-label">
+                                <p class="epk-kicker">{{ 'OUR' }}</p>
+                                <h2>{{ page.header.bandcamp_title|default('Latest Album') }}</h2>
+                            </div>
+                            <div class="embed-responsive bandcamp-player">
+                                <iframe src="{{ page.header.bandcamp_embed_src|e('html_attr') }}"
+                                        frameborder="0"
+                                        allowtransparency="true"
+                                        seamless></iframe>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if page.header.youtube_video_id %}
+                        <div class="epk-embed-block">
+                            <div class="epk-section-label">
+                                <p class="epk-kicker">{{ 'OUR' }}</p>
+                                <h2>{{ page.header.youtube_title|default('Latest Video') }}</h2>
+                            </div>
+                            <div class="embed-responsive video-player">
+                                <iframe src="https://www.youtube.com/embed/{{ page.header.youtube_video_id|e('url') }}?rel=0&modestbranding=1"
+                                        title="Latest video"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if press_gallery %}
+                    <div class="epk-section-label">
+                        <p class="epk-kicker">PRESS</p>
+                        <h2>PHOTOS</h2>
+                    </div>
+                    <div class="epk-gallery">
+                        {% for item in press_gallery %}
+                            {% set image_alt = item.caption ?: page.title ~ ' press photo' %}
+                            <figure class="epk-gallery__item"
+                                data-index="{{ loop.index0 }}"
+                                data-full="{{ item.image.url }}"
+                                data-download="{{ item.image.url }}"
+                                data-filename="{{ item.image.filename }}"
+                                data-caption="{{ item.caption|default('')|e('html_attr') }}"
+                                data-alt="{{ image_alt|e('html_attr') }}"
+                                tabindex="0"
+                                role="button"
+                                aria-label="{{ 'Nagyítás: ' ~ image_alt }}">
+                                <img src="{{ item.image.url }}"
+                                     alt="{{ image_alt }}"
+                                     loading="lazy" />
+                                <figcaption>
+                                    <a class="epk-gallery__download"
+                                       href="{{ item.image.url }}"
+                                       download="{{ item.image.filename }}"
+                                       aria-label="Fotó letöltése">
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                    </a>
+                                </figcaption>
+                            </figure>
+                        {% endfor %}
+                    </div>
+                    <div class="epk-lightbox" id="epkLightbox" aria-hidden="true">
+                        <div class="epk-lightbox__backdrop" tabindex="-1"></div>
+                        <div class="epk-lightbox__body" role="dialog" aria-label="Press photo viewer">
+                            <button class="epk-lightbox__close" type="button" aria-label="Bezárás">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                            <button class="epk-lightbox__nav epk-lightbox__nav--prev" type="button" aria-label="Előző kép">
+                                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            </button>
+                            <img class="epk-lightbox__image" src="" alt="" />
+                            <button class="epk-lightbox__nav epk-lightbox__nav--next" type="button" aria-label="Következő kép">
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+                            <div class="epk-lightbox__caption">
+                                <p class="epk-lightbox__text"></p>
+                            </div>
+                            <a class="epk-lightbox__download-icon"
+                               href="#"
+                               download
+                               aria-label="Fotó letöltése">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </section>
+
+    {% if reviews %}
+    <section class="section epk-reviews">
+        <section class="container {{ grid_size }}">
+            <div class="epk-reviews__header">
+                <p class="epk-kicker">Feedback</p>
+                <h2>REVIEWS</h2>
+            </div>
+            <div class="epk-reviews__list">
+                {% for review in reviews %}
+                    <article class="epk-review">
+                        <div class="epk-review__bubble">
+                            {% if review.outlet %}
+                                <span class="epk-review__outlet">{{ review.outlet }}</span>
+                            {% endif %}
+                            <i class="fa fa-quote-left" aria-hidden="true"></i>
+                            <p class="epk-review__quote">{{ review.quote }}</p>
+                        </div>
+                        <div class="epk-review__meta">
+                            {% if review.author %}
+                                <span class="epk-review__author">{{ review.author }}</span>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    </section>
+    {% endif %}
+
+{% endblock %}

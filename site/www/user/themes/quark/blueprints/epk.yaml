@@ -1,0 +1,98 @@
+title: Electronic Press Kit
+'@extends':
+  type: default
+  context: blueprints://pages
+
+form:
+  fields:
+    tabs:
+      type: tabs
+      active: 1
+      fields:
+        content:
+          type: tab
+          title: Tartalom
+          fields:
+            header.title:
+              type: text
+              label: Oldalcím
+              autofocus: true
+            content:
+              type: editor
+              label: Bemutatkozó szöveg
+              validate:
+                type: textarea
+            header.presskit_file:
+              type: filepicker
+              label: Press kit fájl
+              folder: '@self'
+              preview_images: false
+              accept:
+                - .pdf
+                - .zip
+                - .rar
+                - .doc
+                - .docx
+              description: 'Töltsd fel a press kit fájlt a Media fülön, majd válaszd ki itt.'
+            header.presskit_label:
+              type: text
+              label: Letöltés gomb szöveg
+              default: 'Press kit letöltése'
+            header.press_images:
+              type: list
+              label: Press fotók
+              style: vertical
+              help: 'Tölts fel képeket a Media fülön és állítsd be itt, milyen sorrendben jelenjenek meg.'
+              fields:
+                .image:
+                  type: filepicker
+                  folder: '@self'
+                  label: Kép
+                  preview_images: true
+                .caption:
+                  type: text
+                  label: Képaláírás (opcionális)
+        embeds:
+          type: tab
+          title: Beágyazások
+          fields:
+            header.bandcamp_embed_src:
+              type: text
+              label: Bandcamp embed URL
+              placeholder: 'https://yourband.bandcamp.com/EmbeddedPlayer/...'
+              description: 'Illeszd be az iframe `src` részét a Bandcamp embed kódból.'
+            header.bandcamp_title:
+              type: text
+              label: Bandcamp blokk címe
+              default: 'Latest Album'
+            header.youtube_video_id:
+              type: text
+              label: YouTube videó ID
+              placeholder: dQw4w9WgXcQ
+              description: 'Csak a videó azonosítót add meg. A teljes embed URL automatikusan elkészül.'
+            header.youtube_title:
+              type: text
+              label: YouTube blokk címe
+              default: 'Latest Video'
+        reviews:
+          type: tab
+          title: Reviews
+          fields:
+            header.reviews:
+              type: list
+              label: Review idézetek
+              style: vertical
+              help: 'Addj meg rövid idézeteket kritikákból, forrás megjelöléssel.'
+              fields:
+                .quote:
+                  type: textarea
+                  label: Idézet
+                  placeholder: '"Ez a banda mindent visz..."'
+                .author:
+                  type: text
+                  label: Szerző neve
+                  placeholder: 'Jane Doe'
+                .outlet:
+                  type: text
+                  label: Magazin / Outlet
+                  placeholder: 'Metal Hammer'
